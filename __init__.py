@@ -3,7 +3,7 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
-@version: 0.1
+@version: 0.1.1
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
 @license: GNU Lesser General Public License (LGPL)
@@ -14,7 +14,7 @@ True
 >>> get_hotp(secret, 1, as_string=True) == '765705'
 True
 >>> valid_hotp(get_hotp(secret, 123), secret)
-True
+123
 >>> valid_hotp(get_hotp(secret, 123), secret, last=123)
 False
 >>> valid_totp(get_totp(secret), secret)
@@ -35,8 +35,8 @@ import time
 
 __author__ = "Tomasz Jaskowski <tadeck@gmail.com>"
 __date__ = "18 December 2011"
-__version__ = "0.1"
-__version_info__ = (0, 1)
+__version__ = "0.1.1"
+__version_info__ = (0, 1, 1)
 __license__ = "GNU Lesser General Public License (LGPL)"
 
 
@@ -109,7 +109,8 @@ def get_totp(secret, as_string=False):
 
 
 def valid_hotp(token, secret, last=1, trials=1000):
-    """Check if given token is valid for given secret.
+    """Check if given token is valid for given secret. Return interval number
+    that was successful, or False if not found.
 
     Keyword arguments:
     token     -- token being checked
@@ -119,7 +120,7 @@ def valid_hotp(token, secret, last=1, trials=1000):
 
     >>> secret = 'MFRGGZDFMZTWQ2LK'
     >>> valid_hotp(713385, secret, last=1, trials=5)
-    True
+    4
     >>> valid_hotp(865438, secret, last=1, trials=5)
     False
     >>> valid_hotp(713385, secret, last=4, trials=5)
@@ -129,7 +130,7 @@ def valid_hotp(token, secret, last=1, trials=1000):
         return False
     for i in xrange(last + 1, last + trials + 1):
         if get_hotp(secret=secret, intervals_no=i) == int(token):
-            return True
+            return i
     return False
 
 

@@ -15,12 +15,42 @@ You can use this module in the following way:
 directory)
 2. To get time-based token you invoke it like that:
 
-        my_token = get_totp_token('MZXW633PN5XW6MZX')
+        import onetimepass as otp
+        my_secret = 'MFRGGZDFMZTWQ2LK'
+        my_token = otp.get_totp(my_secret)
 
 3. To get HMAC-based token you invoke it like that:
 
-        my_token = get_hotp_token('MZXW633PN5XW6MZX', intervals_no=3)
+        import onetimepass as otp
+        my_secret = 'MFRGGZDFMZTWQ2LK'
+        my_token = otp.get_hotp(my_secret, intervals_no=3)
 
     where `intervals_no` is the number of the current trial (if checking on the
 server, you have to check several values, higher than the last successful one,
 determined for previous successful authentications).
+
+4. To check time-based token you invoke it like that:
+
+        import onetimepass as otp
+        my_secret = 'MFRGGZDFMZTWQ2LK'
+        my_token = 123456 # should be probably from some user's input
+        is_valid = otp.valid_totp(token=my_token, secret=my_secret)
+
+    where `last` argument (in this case being assigned `last_used`) is the
+number of the last successfully checked interval number (as `valid_totp()` will
+skip it and start checking from the next interval number)
+
+5. To check HMAC-based token you invoke it like that:
+
+        import onetimepass as otp
+        my_secret = 'MFRGGZDFMZTWQ2LK'
+        my_token = 123456 # should be probably from some user's input
+        last_used = 5 # store last valid interval somewhere else
+        is_valid = otp.valid_hotp(token=my_token, secret=my_secret, last=last_used)
+
+    where `is_valid` is being assigned value of `False` if `my_token` has not
+been identified as valid OTP for given secret (`my_secret`) and checked interval
+range. If it has been successful, `is_valid` is assigned a number of the
+working interval number (it should be saved into the database and supplied to
+the function as `last` argument next time the password is being checked, so you
+cannot use the same token again).
