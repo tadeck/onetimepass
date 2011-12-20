@@ -36,10 +36,6 @@ determined for previous successful authentications).
         my_token = 123456 # should be probably from some user's input
         is_valid = otp.valid_totp(token=my_token, secret=my_secret)
 
-    where `last` argument (in this case being assigned `last_used`) is the
-number of the last successfully checked interval number (as `valid_totp()` will
-skip it and start checking from the next interval number)
-
 5. To check HMAC-based token you invoke it like that:
 
         import onetimepass as otp
@@ -48,7 +44,12 @@ skip it and start checking from the next interval number)
         last_used = 5 # store last valid interval somewhere else
         is_valid = otp.valid_hotp(token=my_token, secret=my_secret, last=last_used)
 
-    where `is_valid` is being assigned value of `False` if `my_token` has not
+    where:
+
+    - `last` argument (in this case being assigned `last_used`) is the
+number of the last successfully checked interval number (as `valid_totp()` will
+skip it and start checking from the next interval number)
+    - `is_valid` is being assigned value of `False` if `my_token` has not
 been identified as valid OTP for given secret (`my_secret`) and checked interval
 range. If it has been successful, `is_valid` is assigned a number of the
 working interval number (it should be saved into the database and supplied to
