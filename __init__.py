@@ -34,9 +34,9 @@ import hashlib
 import time
 
 __author__ = "Tomasz Jaskowski <tadeck@gmail.com>"
-__date__ = "18 December 2011"
-__version__ = "0.1.1"
-__version_info__ = (0, 1, 1)
+__date__ = "22 January 2013"
+__version__ = "0.1.2"
+__version_info__ = (0, 1, 2)
 __license__ = "GNU Lesser General Public License (LGPL)"
 
 
@@ -81,7 +81,11 @@ def get_hotp(secret, intervals_no, as_string=False):
         raise TypeError('Incorrect secret')
     msg = struct.pack(">Q", intervals_no)
     hmac_digest = hmac.new(key, msg, hashlib.sha1).digest()
-    o = ord(hmac_digest[19]) & 15
+    try:
+        o = ord(hmac_digest[19]) & 15
+    except TypeError as e:
+        """ We're likely running on Python 3 and don't need to do ord()"""
+        o = hmac_digest[19] & 15
     token_base = struct.unpack(">I", hmac_digest[o:o + 4])[0] & 0x7fffffff
     token = token_base % 1000000
     if as_string:
