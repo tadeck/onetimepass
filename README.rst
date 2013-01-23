@@ -1,3 +1,8 @@
+Current stable release: `onetimepass-v0.1.2.tar.gz`_
+
+.. _onetimepass-v0.1.2.tar.gz:
+   https://github.com/tadeck/onetimepass/archive/v0.1.2.tar.gz
+
 What is OneTimePass
 ===================
 
@@ -5,6 +10,21 @@ OneTimePass (actually ``onetimepass``) is a module for generating one-time
 passwords, namely HOTPs (HMAC-based one-time passowords) and TOTPs (time-based
 one-time passwords). They are used eg. within Google Authenticator application
 for Android or iPhone.
+
+How to install
+==============
+
+To install the library, you can either use ``pip``, or just download it
+separately. Installing in ``pip`` is the simplest. Assuming you are installing
+it system-wide::
+
+    $ sudo pip install onetimepass
+
+(if you are installing it in virtualenv, you do not need "``sudo``" part).
+
+Alternatively, you can follow the download link above and unpack in some
+directory on your ``sys.path``, or clone it as Git submodule to your own
+directory.
 
 How to use OneTimePass
 ======================
