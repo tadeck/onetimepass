@@ -128,7 +128,7 @@ def valid_hotp(token, secret, last=1, trials=1000):
     that was successful, or False if not found.
 
     :param token: token being checked
-    :type token: int
+    :type token: int or str
     :param secret: secret for which token is checked
     :type secret: str
     :param last: last used interval (start checking with next one)
