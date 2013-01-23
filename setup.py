@@ -1,4 +1,7 @@
-from distutils.core import setup
+try:
+    from setuptools import setup
+except ImportError:
+    from distutils.core import setup
 import os
 
 CURRENT_DIR = os.path.dirname(__file__)
@@ -16,6 +19,9 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     description='Module for generating and validating HOTP and TOTP tokens',
+    install_requires=[
+        # TODO: Place dependencies here
+    ],
     license='MIT',
     long_description=open(os.path.join(CURRENT_DIR, 'README.rst')).read(),
     name='onetimepass',
