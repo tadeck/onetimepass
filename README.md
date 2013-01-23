@@ -45,7 +45,6 @@ determined for previous successful authentications).
         is_valid = otp.valid_hotp(token=my_token, secret=my_secret, last=last_used)
 
     where:
-
     - `last` argument (in this case being assigned `last_used`) is the
 number of the last successfully checked interval number (as `valid_totp()` will
 skip it and start checking from the next interval number)
@@ -55,3 +54,8 @@ range. If it has been successful, `is_valid` is assigned a number of the
 working interval number (it should be saved into the database and supplied to
 the function as `last` argument next time the password is being checked, so you
 cannot use the same token again).
+    - Note that the value for `secret` has to be upper case. Furthermore, for
+      Python 3 support, you need to pass in a bytestring, so encode your
+      secret as follows:
+
+            my_secret = 'mfrggzdfmztwq2lk'.upper().encode('ascii')
