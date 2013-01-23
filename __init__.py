@@ -46,6 +46,11 @@ def _is_possible_token(token):
 
     Currently allows only numeric tokens no longer than 6 chars.
 
+    :param token: token value to be checked
+    :type token: int or str
+    :return: True if can be a candidate for token, False otherwise
+    :rtype: bool
+
     >>> _is_possible_token(123456)
     True
     >>> _is_possible_token('123456')
@@ -58,15 +63,22 @@ def _is_possible_token(token):
     return str(token).isdigit() and len(str(token)) <= 6
 
 
-def get_hotp(secret, intervals_no, as_string=False):
-    """Get HMAC-based one-time password on the basis of given secret and
+def get_hotp(secret, intervals_no, as_string=False, casefold=True):
+    """
+    Get HMAC-based one-time password on the basis of given secret and
     interval number.
 
-    Keyword arguments:
-    secret          -- the base32-encoded string acting as secret key
-    intervals_no    -- interval number used for generating different tokens, it
-    is incremented with each use
-    as_string       -- True if result should be padded string, False otherwise
+    :param secret: the base32-encoded string acting as secret key
+    :type secret: str
+    :param intervals_no: interval number used for getting different tokens, it
+        is incremented with each use
+    :type intervals_no: int
+    :param as_string: True if result should be padded string, False otherwise
+    :type as_string: bool
+    :param casefold: True (default), if should accept also lowercase alphabet
+    :type casefold: bool
+    :return: generated HOTP token
+    :rtype: int or str
 
     >>> get_hotp('MFRGGZDFMZTWQ2LK', intervals_no=1)
     765705
@@ -76,7 +88,7 @@ def get_hotp(secret, intervals_no, as_string=False):
     '816065'
     """
     try:
-        key = base64.b32decode(secret)
+        key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
         raise TypeError('Incorrect secret')
     msg = struct.pack(">Q", intervals_no)
@@ -93,9 +105,12 @@ def get_hotp(secret, intervals_no, as_string=False):
 def get_totp(secret, as_string=False):
     """Get time-based one-time password on the basis of given secret and time.
 
-    Keyword arguments:
-    secret       -- the base32-encoded string acting as secret key
-    as_string    -- True if result should be padded string, False otherwise
+    :param secret: the base32-encoded string acting as secret key
+    :type secret: str
+    :param as_string: True if result should be padded string, False otherwise
+    :type as_string: bool
+    :return: generated TOTP token
+    :rtype: int or str
 
     >>> get_hotp('MFRGGZDFMZTWQ2LK', int(time.time())//30) == \
         get_totp('MFRGGZDFMZTWQ2LK')
@@ -112,11 +127,16 @@ def valid_hotp(token, secret, last=1, trials=1000):
     """Check if given token is valid for given secret. Return interval number
     that was successful, or False if not found.
 
-    Keyword arguments:
-    token     -- token being checked
-    secret    -- secret for which token is checked
-    last      -- last used interval (start checking with next one)
-    trials    -- number of intervals to check after 'last'
+    :param token: token being checked
+    :type token: int
+    :param secret: secret for which token is checked
+    :type secret: str
+    :param last: last used interval (start checking with next one)
+    :type last: int
+    :param trials: number of intervals to check after 'last'
+    :type trials: int
+    :return: interval number, or False if check unsuccessful
+    :rtype: int or bool
 
     >>> secret = 'MFRGGZDFMZTWQ2LK'
     >>> valid_hotp(713385, secret, last=1, trials=5)
@@ -138,9 +158,12 @@ def valid_totp(token, secret):
     """Check if given token is valid time-based one-time password for given
     secret.
 
-    Keyword arguments:
-    token    -- token which is being checked
-    secret   -- secret for which the token is being checked
+    :param token: token which is being checked
+    :type token: int or str
+    :param secret: secret for which the token is being checked
+    :type secret: str
+    :return: True, if is valid token, False otherwise
+    :rtype: bool
 
     >>> secret = 'MFRGGZDFMZTWQ2LK'
     >>> token = get_totp(secret)
