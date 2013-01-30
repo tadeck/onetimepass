@@ -26,6 +26,6 @@ setup(
     long_description=open(os.path.join(CURRENT_DIR, 'README.rst')).read(),
     name='onetimepass',
     packages=['onetimepass'],
-    url='https://github.com/tadeck/onetimepass',
+    url='https://github.com/tadeck/onetimepass/archive/v0.1.2.tar.gz',
     version='0.1.2',
 )
