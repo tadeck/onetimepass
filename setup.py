@@ -1,3 +1,11 @@
+"""
+onetimepass module for HMAC-Based One-Time Passwords and Time-Based One-Time
+Passwords, as implemented in Google Authenticator.
+
+source: https://github.com/tadeck/onetimepass
+author: Tomasz Jaskowski (http://www.jaskowski.info/)
+"""
+
 try:
     from setuptools import setup
 except ImportError:
