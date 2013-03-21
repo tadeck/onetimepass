@@ -27,10 +27,10 @@ False
 False
 """
 
-import hmac
 import base64
-import struct
 import hashlib
+import hmac
+import struct
 import time
 
 __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
