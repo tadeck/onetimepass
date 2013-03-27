@@ -1,6 +1,21 @@
 Rules of contributing in ``onetimepass`` module
 ===============================================
 
+TL;DR
+-----
+
+There are three most valuable ways of contributing to onetimepass:
+
+#. Submitting issues / tickets with errors or feature requests,
+#. Submitting tests reproducing the issues or showing expected functionality,
+#. Contributing with code,
+
+Whatever you will choose, it is always advised to attach code samples (like
+tests) and error messages, so the solution may be properly assessed.
+
+Steps for contribution
+----------------------
+
 Currently, there are no rules. Until this is solved out, if you urgently need
 to add or fix something, it is advised to:
 

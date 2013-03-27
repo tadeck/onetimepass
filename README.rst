@@ -1,3 +1,6 @@
+Versions
+========
+
 Current stable release: `onetimepass-v0.1.2.tar.gz`_
 
 Current development release (beta release compatible with both Python 2.6-2.7,
@@ -7,6 +10,23 @@ as well as with Python 3.2): `onetimepass-v0.2.0.tar.gz`_
    https://github.com/tadeck/onetimepass/archive/v0.1.2.tar.gz
 .. _onetimepass-v0.2.0.tar.gz:
    https://github.com/tadeck/onetimepass/archive/v0.2.0.tar.gz
+
+Changelog
+---------
+
++=========+============+======================================================+
+| Version | Date       | Changes                                              |
++=========+============+======================================================+
+| 0.2.0   | TBD        | - added compatibility with Python 3.x,               |
+|         |            | - removed compatibility with Python 2.5 and earlier, |
++---------+------------+------------------------------------------------------+
+| 0.1.2   | 2013-01-23 | - added automated case fold to secret,               |
++---------+------------+------------------------------------------------------+
+| 0.1.1   | 2013-12-20 | - internal code improvements,                        |
+|         |            | - documentation,                                     |
++---------+------------+------------------------------------------------------+
+| 0.1.0   | 2011-12-19 | (initial public release)                             |
++---------+------------+------------------------------------------------------+
 
 What is OneTimePass
 ===================
