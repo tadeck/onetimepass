@@ -3,15 +3,15 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
-@version: 0.1.2
+@version: 0.2.0
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
 @license: GNU Lesser General Public License (LGPL)
 
->>> secret = 'MFRGGZDFMZTWQ2LK'
+>>> secret = b'MFRGGZDFMZTWQ2LK'
 >>> get_hotp(secret, 1) == 765705
 True
->>> get_hotp(secret, 1, as_string=True) == '765705'
+>>> get_hotp(secret, 1, as_string=True) == b'765705'
 True
 >>> valid_hotp(get_hotp(secret, 123), secret)
 123
@@ -30,6 +30,7 @@ False
 import base64
 import hashlib
 import hmac
+import six
 import struct
 import time
 
@@ -53,14 +54,16 @@ def _is_possible_token(token):
 
     >>> _is_possible_token(123456)
     True
-    >>> _is_possible_token('123456')
+    >>> _is_possible_token(b'123456')
     True
-    >>> _is_possible_token('abcdef')
+    >>> _is_possible_token(b'abcdef')
     False
-    >>> _is_possible_token('12345678')
+    >>> _is_possible_token(b'12345678')
     False
     """
-    return str(token).isdigit() and len(str(token)) <= 6
+    if not isinstance(token, bytes):
+        token = six.b(str(token))
+    return token.isdigit() and len(token) <= 6
 
 
 def get_hotp(secret, intervals_no, as_string=False, casefold=True):
@@ -80,24 +83,26 @@ def get_hotp(secret, intervals_no, as_string=False, casefold=True):
     :return: generated HOTP token
     :rtype: int or str
 
-    >>> get_hotp('MFRGGZDFMZTWQ2LK', intervals_no=1)
+    >>> get_hotp(b'MFRGGZDFMZTWQ2LK', intervals_no=1)
     765705
-    >>> get_hotp('MFRGGZDFMZTWQ2LK', intervals_no=2)
+    >>> get_hotp(b'MFRGGZDFMZTWQ2LK', intervals_no=2)
     816065
-    >>> get_hotp('MFRGGZDFMZTWQ2LK', intervals_no=2, as_string=True)
-    '816065'
+    >>> result = get_hotp(b'MFRGGZDFMZTWQ2LK', intervals_no=2, as_string=True)
+    >>> result == b'816065'
+    True
     """
     try:
         key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
         raise TypeError('Incorrect secret')
-    msg = struct.pack(">Q", intervals_no)
+    msg = struct.pack('>Q', intervals_no)
     hmac_digest = hmac.new(key, msg, hashlib.sha1).digest()
-    o = ord(hmac_digest[19]) & 15
-    token_base = struct.unpack(">I", hmac_digest[o:o + 4])[0] & 0x7fffffff
+    ob = hmac_digest[19] if six.PY3 else ord(hmac_digest[19])
+    o = ob & 15
+    token_base = struct.unpack('>I', hmac_digest[o:o + 4])[0] & 0x7fffffff
     token = token_base % 1000000
     if as_string:
-        return '{:06d}'.format(token)
+        return six.b('{:06d}'.format(token))
     else:
         return token
 
@@ -112,11 +117,11 @@ def get_totp(secret, as_string=False):
     :return: generated TOTP token
     :rtype: int or str
 
-    >>> get_hotp('MFRGGZDFMZTWQ2LK', int(time.time())//30) == \
-        get_totp('MFRGGZDFMZTWQ2LK')
+    >>> get_hotp(b'MFRGGZDFMZTWQ2LK', int(time.time())//30) == \
+        get_totp(b'MFRGGZDFMZTWQ2LK')
     True
-    >>> get_hotp('MFRGGZDFMZTWQ2LK', int(time.time())//30) == \
-        get_totp('MFRGGZDFMZTWQ2LK', as_string=True)
+    >>> get_hotp(b'MFRGGZDFMZTWQ2LK', int(time.time())//30) == \
+        get_totp(b'MFRGGZDFMZTWQ2LK', as_string=True)
     False
     """
     interv_no = int(time.time()) // 30
@@ -138,7 +143,7 @@ def valid_hotp(token, secret, last=1, trials=1000):
     :return: interval number, or False if check unsuccessful
     :rtype: int or bool
 
-    >>> secret = 'MFRGGZDFMZTWQ2LK'
+    >>> secret = b'MFRGGZDFMZTWQ2LK'
     >>> valid_hotp(713385, secret, last=1, trials=5)
     4
     >>> valid_hotp(865438, secret, last=1, trials=5)
@@ -148,7 +153,7 @@ def valid_hotp(token, secret, last=1, trials=1000):
     """
     if not _is_possible_token(token):
         return False
-    for i in xrange(last + 1, last + trials + 1):
+    for i in six.moves.xrange(last + 1, last + trials + 1):
         if get_hotp(secret=secret, intervals_no=i) == int(token):
             return i
     return False
@@ -165,7 +170,7 @@ def valid_totp(token, secret):
     :return: True, if is valid token, False otherwise
     :rtype: bool
 
-    >>> secret = 'MFRGGZDFMZTWQ2LK'
+    >>> secret = b'MFRGGZDFMZTWQ2LK'
     >>> token = get_totp(secret)
     >>> valid_totp(token, secret)
     True
@@ -174,7 +179,7 @@ def valid_totp(token, secret):
     >>> token = get_totp(secret, as_string=True)
     >>> valid_totp(token, secret)
     True
-    >>> valid_totp(token+'1', secret)
+    >>> valid_totp(token + b'1', secret)
     False
     """
     return _is_possible_token(token) and int(token) == get_totp(secret)

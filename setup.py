@@ -28,12 +28,12 @@ setup(
     ],
     description='Module for generating and validating HOTP and TOTP tokens',
     install_requires=[
-        # TODO: Place dependencies here
+        'six',  # tested with 1.3.0
     ],
     license='MIT',
     long_description=open(os.path.join(CURRENT_DIR, 'README.rst')).read(),
     name='onetimepass',
     packages=['onetimepass'],
     url='https://github.com/tadeck/onetimepass',
-    version='0.1.2',
+    version='0.2.0',
 )

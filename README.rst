@@ -1,7 +1,12 @@
 Current stable release: `onetimepass-v0.1.2.tar.gz`_
 
+Current development release (beta release compatible with both Python 2.6-2.7,
+as well as with Python 3.2): `onetimepass-v0.2.0.tar.gz`_
+
 .. _onetimepass-v0.1.2.tar.gz:
    https://github.com/tadeck/onetimepass/archive/v0.1.2.tar.gz
+.. _onetimepass-v0.2.0.tar.gz:
+   https://github.com/tadeck/onetimepass/archive/v0.2.0.tar.gz
 
 What is OneTimePass
 ===================
