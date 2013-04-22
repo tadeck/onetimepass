@@ -72,7 +72,7 @@ def get_hotp(secret, intervals_no, as_string=False, casefold=True):
     interval number.
 
     :param secret: the base32-encoded string acting as secret key
-    :type secret: str
+    :type secret: str or unicode
     :param intervals_no: interval number used for getting different tokens, it
         is incremented with each use
     :type intervals_no: int
@@ -91,6 +91,9 @@ def get_hotp(secret, intervals_no, as_string=False, casefold=True):
     >>> result == b'816065'
     True
     """
+    if isinstance(secret, six.string_types):
+        # It is unicode, convert it to bytes
+        secret = secret.encode('utf-8')
     try:
         key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
@@ -102,6 +105,7 @@ def get_hotp(secret, intervals_no, as_string=False, casefold=True):
     token_base = struct.unpack('>I', hmac_digest[o:o + 4])[0] & 0x7fffffff
     token = token_base % 1000000
     if as_string:
+        # TODO: should as_string=True return unicode, not bytes?
         return six.b('{:06d}'.format(token))
     else:
         return token
