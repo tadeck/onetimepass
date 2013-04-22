@@ -3,10 +3,10 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
-@version: 0.2.0
+@version: 0.2.1
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
-@license: GNU Lesser General Public License (LGPL)
+@license: MIT
 
 >>> secret = b'MFRGGZDFMZTWQ2LK'
 >>> get_hotp(secret, 1) == 765705
@@ -36,7 +36,7 @@ import time
 
 __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
 __date__ = '23 January 2013'
-__version_info__ = (0, 1, 2)
+__version_info__ = (0, 2, 1)
 __version__ = '%s.%s.%s' % __version_info__
 __license__ = 'GNU Lesser General Public License (LGPL)'
 
