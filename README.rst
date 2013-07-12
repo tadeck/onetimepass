@@ -1,20 +1,20 @@
 Versions
 ========
 
-Current stable release: `onetimepass-v0.2.0.tar.gz`_ |otp-status-prod|_
+Current stable release: `onetimepass-v0.2.2.tar.gz`_ |otp-status-prod|_
 
-Current development release: `onetimepass-v0.2.1.tar.gz`_ |otp-status-dev|_
+Current development release: `onetimepass-master.tar.gz`_ |otp-status-dev|_
 
 .. |otp-status-prod| image::
-   https://api.travis-ci.org/tadeck/onetimepass.png?branch=v0.2.0
+   https://api.travis-ci.org/tadeck/onetimepass.png?branch=v0.2.2
 .. |otp-status-dev| image::
-   https://api.travis-ci.org/tadeck/onetimepass.png?branch=v0.2.1
+   https://api.travis-ci.org/tadeck/onetimepass.png?branch=master
 .. _otp-status-prod: https://travis-ci.org/tadeck/onetimepass
 .. _otp-status-dev: https://travis-ci.org/tadeck/onetimepass
-.. _onetimepass-v0.2.0.tar.gz:
-   https://github.com/tadeck/onetimepass/archive/v0.2.0.tar.gz
-.. _onetimepass-v0.2.1.tar.gz:
-   https://github.com/tadeck/onetimepass/archive/v0.2.1.tar.gz
+.. _onetimepass-v0.2.2.tar.gz:
+   https://github.com/tadeck/onetimepass/archive/v0.2.2.tar.gz
+.. _onetimepass-master.tar.gz:
+   https://github.com/tadeck/onetimepass/archive/master.tar.gz
 
 Changelog
 ---------
@@ -22,7 +22,10 @@ Changelog
 +---------+------------+------------------------------------------------------+
 | Version | Date       | Changes                                              |
 +=========+============+======================================================+
-| 0.2.1   | TBD        | - support for unicode secrets,                       |
+| 0.2.2   | 2013-07-12 | - license clarification,                             |
+|         |            | - removal of compiled documentation from the sources,|
++---------+------------+------------------------------------------------------+
+| 0.2.1   | 2013-07-12 | - support for unicode secrets,                       |
 |         |            | - preliminary support for Travis CI,                 |
 +---------+------------+------------------------------------------------------+
 | 0.2.0   | 2013-04-11 | - added compatibility with Python 3.x,               |
@@ -109,3 +112,11 @@ You can use this module in the following way:
      number of the working interval number (it should be saved into the
      database and supplied to the function as ``last`` argument next time the
      password is being checked, so you cannot use the same token again).
+
+License
+=======
+
+License for this library is available in ``LICENSE.rst`` file, in the same
+directory. Online version is available here_.
+
+.. _here: https://github.com/tadeck/onetimepass/blob/master/README.rst

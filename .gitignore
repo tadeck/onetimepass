@@ -36,3 +36,4 @@ nosetests.xml
 
 # IntelliJ Idea
 .idea
+docs/_build

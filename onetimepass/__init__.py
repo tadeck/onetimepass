@@ -38,7 +38,7 @@ __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
 __date__ = '23 January 2013'
 __version_info__ = (0, 2, 1)
 __version__ = '%s.%s.%s' % __version_info__
-__license__ = 'GNU Lesser General Public License (LGPL)'
+__license__ = 'MIT'
 
 
 def _is_possible_token(token):
