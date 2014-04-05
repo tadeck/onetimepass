@@ -41,6 +41,12 @@ __version__ = '%s.%s.%s' % __version_info__
 __license__ = 'MIT'
 
 
+class InvalidToken(ValueError):
+    """
+    Exception for representing issues with tokens
+    """
+
+
 def _is_possible_token(token):
     """Determines if given value is acceptable as a token. Used when validating
     tokens.
@@ -63,6 +69,7 @@ def _is_possible_token(token):
     """
     if not isinstance(token, bytes):
         token = six.b(str(token))
+        raise InvalidToken('Wrong token')
     return token.isdigit() and len(token) <= 6
 
 
