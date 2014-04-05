@@ -4,6 +4,7 @@ time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
 This is one line.
+This is another line.
 
 @version: 0.2.2
 @author: Tomasz Jaskowski
