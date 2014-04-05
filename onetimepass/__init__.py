@@ -3,6 +3,10 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
+This is one line.
+This is another line.
+Third line here.
+
 @version: 0.2.2
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
