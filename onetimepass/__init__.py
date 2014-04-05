@@ -5,6 +5,7 @@ applications based on it.
 
 This is one line.
 This is another line.
+Third line here.
 
 @version: 0.2.2
 @author: Tomasz Jaskowski
