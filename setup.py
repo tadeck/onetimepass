@@ -27,7 +27,7 @@ setup(
         'Topic :: Software Development :: Libraries',
     ],
     description='Module for generating and validating HOTP and TOTP tokens',
-    download_url='https://github.com/tadeck/onetimepass/archive/v0.2.0.tar.gz',
+    download_url='https://github.com/tadeck/onetimepass/archive/v0.3.0.tar.gz',
     install_requires=[
         # TODO: Assign it dynamically based on requirements.txt file content
         'six',  # tested with 1.3.0
@@ -37,5 +37,5 @@ setup(
     name='onetimepass',
     packages=['onetimepass'],
     url='https://github.com/tadeck/onetimepass/',
-    version='0.2.2',
+    version='0.3.0',
 )

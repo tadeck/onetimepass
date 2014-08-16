@@ -36,6 +36,19 @@ class PreliminaryChecksTestCase(TestCase):
         self.assertFalse(_is_possible_token(six.u('abcdef')))
         self.assertFalse(_is_possible_token(six.u('12345678')))
 
+    def test_variable_length_in_possible_tokens(self):
+        """
+        Check if length is respected when verifying tokens
+        """
+        # When default is length of 6:
+        self.assertFalse(_is_possible_token(1234567))
+        # Longer version:
+        self.assertTrue(_is_possible_token(1234567, token_length=7))
+        # Shorter version, when longer is allowed:
+        self.assertTrue(_is_possible_token(123456, token_length=7))
+        # Invalid token with correct length:
+        self.assertFalse(_is_possible_token('abcdefg', token_length=7))
+
 
 class HotpGenerationTestCase(TestCase):
     """
