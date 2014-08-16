@@ -47,7 +47,7 @@ What is OneTimePass
 ===================
 
 OneTimePass (actually ``onetimepass``) is a module for generating one-time
-passwords, namely HOTPs (HMAC-based one-time passowords) and TOTPs (time-based
+passwords, namely HOTPs (HMAC-based one-time passwords) and TOTPs (time-based
 one-time passwords). They are used eg. within Google Authenticator application
 for Android or iPhone.
 
