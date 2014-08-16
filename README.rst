@@ -1,18 +1,11 @@
 Versions
 ========
 
-Current stable release: `onetimepass-v0.2.2.tar.gz`_ |otp-status-prod|_
-
 Current development release: `onetimepass-master.tar.gz`_ |otp-status-dev|_
 
-.. |otp-status-prod| image::
-   https://api.travis-ci.org/tadeck/onetimepass.png?branch=v0.2.2
 .. |otp-status-dev| image::
    https://api.travis-ci.org/tadeck/onetimepass.png?branch=master
-.. _otp-status-prod: https://travis-ci.org/tadeck/onetimepass
 .. _otp-status-dev: https://travis-ci.org/tadeck/onetimepass
-.. _onetimepass-v0.2.2.tar.gz:
-   https://github.com/tadeck/onetimepass/archive/v0.2.2.tar.gz
 .. _onetimepass-master.tar.gz:
    https://github.com/tadeck/onetimepass/archive/master.tar.gz
 
