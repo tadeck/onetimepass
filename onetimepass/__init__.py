@@ -130,6 +130,7 @@ def get_totp(
         digest_method=hashlib.sha1,
         token_length=6,
         interval_length=30,
+        base_time=None,
 ):
     """Get time-based one-time password on the basis of given secret and time.
 
@@ -143,6 +144,8 @@ def get_totp(
     :type token_length: int
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
+    :param time: the time at which to check the key (None is the default and will use time.time())
+    :type time: time
     :return: generated TOTP token
     :rtype: int or str
 
@@ -153,7 +156,9 @@ def get_totp(
         get_totp(b'MFRGGZDFMZTWQ2LK', as_string=True)
     False
     """
-    interv_no = int(time.time()) // interval_length
+    if not base_time:
+        base_time = time.time()
+    interv_no = int(base_time) // interval_length
     return get_hotp(
         secret,
         intervals_no=interv_no,
@@ -217,6 +222,8 @@ def valid_totp(
         digest_method=hashlib.sha1,
         token_length=6,
         interval_length=30,
+        base_time=None,
+        window=0,
 ):
     """Check if given token is valid time-based one-time password for given
     secret.
@@ -230,6 +237,10 @@ def valid_totp(
     :param token_length: length of the token (6 by default)
     :type token_length: int
     :param interval_length: length of TOTP interval (30 seconds by default)
+    :type interval_length: int
+    :param base_time: the time at which to check the key (None is the default and will use time.time())
+    :type base_time: time
+    :param window: the number of intervals allowed in either direction (0 by default)
     :type interval_length: int
     :return: True, if is valid token, False otherwise
     :rtype: bool
@@ -246,15 +257,24 @@ def valid_totp(
     >>> valid_totp(token + b'1', secret)
     False
     """
-    return _is_possible_token(
+    if not base_time:
+        base_time = time.time()
+
+    if _is_possible_token(
         token,
         token_length=token_length,
-    ) and int(token) == get_totp(
-        secret,
-        digest_method=digest_method,
-        token_length=token_length,
-        interval_length=interval_length,
-    )
+    ):
+        for w in range(-window, window):
+            check_time = base_time + w * interval_length
+            if int(token) == get_totp(secret,
+                                      digest_method=digest_method,
+                                      token_length=token_length,
+                                      interval_length=interval_length,
+                                      base_time=check_time):
+                return True
+        else:
+            return False
+
 
 __all__ = [
     'get_hotp',
