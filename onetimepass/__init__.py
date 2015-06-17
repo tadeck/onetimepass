@@ -145,7 +145,7 @@ def get_totp(
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
     :param clock: clock time in epoch seconds to generate the totp for, default is Now if None
-    :type clock: number
+    :type clock: int
     :return: generated TOTP token
     :rtype: int or str
 
@@ -223,7 +223,7 @@ def valid_totp(
         token_length=6,
         interval_length=30,
         clock=None,
-        window=0
+        window=0,
 ):
     """Check if given token is valid time-based one-time password for given
     secret.
@@ -239,7 +239,7 @@ def valid_totp(
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
     :param clock: clock time in epoch seconds to generate the totp for, default is Now if None
-    :type clock: number
+    :type clock: int
     :param window: compensate for clock skew, number of intervals to check on each side of the current time.
         (default is 0 - only check the current clock time)
     :type window: int (positive)
