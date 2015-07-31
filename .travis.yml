@@ -10,5 +10,5 @@ python:
   - "nightly"
   - "pypy"
   - "pypy3"
-install: "pip install -r requirements/tests.txt --use-mirrors"
+install: "pip install -r requirements/tests.txt"
 script: "python -munittest tests"
