@@ -144,7 +144,7 @@ def get_totp(
     :type token_length: int
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
-    :param clock: clock time in epoch seconds to generate the totp for, default is Now if None
+    :param clock: time in epoch seconds to generate totp for, default is now
     :type clock: int
     :return: generated TOTP token
     :rtype: int or str
@@ -156,7 +156,7 @@ def get_totp(
         get_totp(b'MFRGGZDFMZTWQ2LK', as_string=True)
     False
     """
-    if clock is None :
+    if clock is None:
         clock = time.time()
     interv_no = int(clock) // interval_length
     return get_hotp(
@@ -238,10 +238,11 @@ def valid_totp(
     :type token_length: int
     :param interval_length: length of TOTP interval (30 seconds by default)
     :type interval_length: int
-    :param clock: clock time in epoch seconds to generate the totp for, default is Now if None
+    :param clock: time in epoch seconds to generate totp for, default is now
     :type clock: int
-    :param window: compensate for clock skew, number of intervals to check on each side of the current time.
-        (default is 0 - only check the current clock time)
+    :param window: compensate for clock skew, number of intervals to check on
+        each side of the current time. (default is 0 - only check the current
+        clock time)
     :type window: int (positive)
     :return: True, if is valid token, False otherwise
     :rtype: bool
@@ -258,8 +259,8 @@ def valid_totp(
     >>> valid_totp(token + b'1', secret)
     False
     """
-    if _is_possible_token( token, token_length=token_length):
-        if clock is None :
+    if _is_possible_token(token, token_length=token_length):
+        if clock is None:
             clock = time.time()
         for w in range(-window, window+1):
             if int(token) == get_totp(

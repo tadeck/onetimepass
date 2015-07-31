@@ -186,7 +186,7 @@ class TotpGenerationTestCase(TestCase):
 
         # hotp intervals minus 1
         hotp = get_hotp(secret=secret, intervals_no=int(time.time())//30-1,)
-        #totp 30 seconds in the past
+        # totp 30 seconds in the past
         totp = get_totp(secret=secret, clock=(int(time.time())-30))
         self.assertEqual(hotp, totp)
 
@@ -196,17 +196,17 @@ class TotpGenerationTestCase(TestCase):
         """
         secret = b'MFRGGZDFMZTWQ2LK'
         totp = get_totp(secret=secret, clock=(int(time.time()-30)))
-        self.assertFalse(valid_totp(totp,secret))
-        self.assertTrue(valid_totp(totp,secret,window=1))
+        self.assertFalse(valid_totp(totp, secret))
+        self.assertTrue(valid_totp(totp, secret, window=1))
 
         totp = get_totp(secret=secret, clock=(int(time.time()+30)))
-        self.assertFalse(valid_totp(totp,secret))
-        self.assertTrue(valid_totp(totp,secret,window=1))
+        self.assertFalse(valid_totp(totp, secret))
+        self.assertTrue(valid_totp(totp, secret, window=1))
 
         totp = get_totp(secret=secret, clock=(int(time.time()-59)))
-        self.assertFalse(valid_totp(totp,secret))
-        self.assertFalse(valid_totp(totp,secret,window=1))
-        self.assertTrue(valid_totp(totp,secret,window=2))
+        self.assertFalse(valid_totp(totp, secret))
+        self.assertFalse(valid_totp(totp, secret, window=1))
+        self.assertTrue(valid_totp(totp, secret, window=2))
 
 
 class TotpValidityTestCase(TestCase):
