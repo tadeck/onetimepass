@@ -209,7 +209,6 @@ class TotpGenerationTestCase(TestCase):
         self.assertTrue(valid_totp(totp,secret,window=2))
 
 
-
 class TotpValidityTestCase(TestCase):
     """
     TOTP token validation checks
