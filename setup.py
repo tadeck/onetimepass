@@ -52,5 +52,5 @@ setup(
     name='onetimepass',
     packages=['onetimepass'],
     url='https://github.com/tadeck/onetimepass/',
-    version='0.4.0',  # candidate release for 1.0.0
+    version='1.0.0',
 )
