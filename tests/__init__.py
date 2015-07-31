@@ -90,6 +90,36 @@ class HotpGenerationTestCase(TestCase):
             b'816065',
         )
 
+    def test_ignoring_spaces_in_secret(self):
+        """
+        Check if spaces are skipped during generation of the token
+        """
+        def chunks(original, size):
+            """
+            Split original string into chunks sized as requested in ``size``
+            parameter. Returns iterator yielding single chunks.
+            Similar to: http://stackoverflow.com/a/312464/548696
+            :param original: original string (almost any iterable really)
+            :type original: str or unicode
+            :param size: requested size of chunks
+            :type size: int
+            """
+            for i in six.moves.range(0, len(original), size):
+                yield original[i:i+size]
+
+        # Simple generation without spaces:
+        secret = 'MFRGGZDFMZTWQ2LK'
+        # Simple generation with spaces:
+        secret_with_spaces = ' '.join(chunks(secret, 3))
+        # Check if was properly sliced:
+        self.assertEqual(5, secret_with_spaces.count(' '))
+
+        # Both spaceless secret and secret with spaces should give the same
+        self.assertEqual(
+            get_hotp(secret, 1),
+            get_hotp(secret_with_spaces, 1),
+        )
+
 
 class HotpValidityTestCase(TestCase):
     """

@@ -107,6 +107,8 @@ def get_hotp(
     if isinstance(secret, six.string_types):
         # It is unicode, convert it to bytes
         secret = secret.encode('utf-8')
+    # Get rid of all the spacing:
+    secret = secret.replace(' ', '')
     try:
         key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
