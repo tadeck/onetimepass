@@ -3,7 +3,7 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
-@version: 0.3.0
+@version: 1.0.0
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
 @license: MIT
@@ -36,7 +36,7 @@ import time
 
 __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
 __date__ = '16 August 2014'
-__version_info__ = (0, 3, 0)
+__version_info__ = (1, 0, 0)
 __version__ = '%s.%s.%s' % __version_info__
 __license__ = 'MIT'
 

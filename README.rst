@@ -15,6 +15,9 @@ Changelog
 +---------+------------+------------------------------------------------------+
 | Version | Date       | Changes                                              |
 +=========+============+======================================================+
+| 1.0.0   | 2015-07-31 | - skipping spaces if they are given in secret,       |
+|         |            | - test suite made more reliable,                     |
++---------+------------+------------------------------------------------------+
 | 0.3.0   | 2014-08-16 | - configurable digest method,                        |
 |         |            | - configurable token length,                         |
 |         |            | - configurable TOTP interval length,                 |
@@ -71,6 +74,13 @@ You can use this module in the following way:
        import onetimepass as otp
        my_secret = 'MFRGGZDFMZTWQ2LK'
        my_token = otp.get_totp(my_secret)
+
+.. note::
+    ``my_secret`` is case-insensitive, also spaces are ignored. This means you
+    can provide your users with more readable representations of the secrets
+    (eg. ``mfrg gzdf mztw q2lk`` instead of ``MFRGGZDFMZTWQ2LK``) and pass them
+    unchanged to library. Same applies to other functions accepting secrets in
+    this library.
 
 3. To get HMAC-based token you invoke it like that::
 
