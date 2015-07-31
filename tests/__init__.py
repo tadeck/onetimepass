@@ -241,7 +241,7 @@ class TotpGenerationTestCase(TestCase):
             self.assertFalse(valid_totp(totp, secret))
             self.assertTrue(valid_totp(totp, secret, window=1))
 
-            totp = get_totp(secret=secret, clock=(int(time.time()-59)))
+            totp = get_totp(secret=secret, clock=(int(time.time()-60)))
             self.assertFalse(valid_totp(totp, secret))
             self.assertFalse(valid_totp(totp, secret, window=1))
             self.assertTrue(valid_totp(totp, secret, window=2))
