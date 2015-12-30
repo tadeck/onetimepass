@@ -129,4 +129,4 @@ License
 License for this library is available in ``LICENSE.rst`` file, in the same
 directory. Online version is available here_.
 
-.. _here: https://github.com/tadeck/onetimepass/blob/master/README.rst
+.. _here: https://github.com/tadeck/onetimepass/blob/master/LICENSE.rst
