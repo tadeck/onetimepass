@@ -110,9 +110,10 @@ def get_hotp(
     # Get rid of all the spacing:
     secret = secret.replace(b' ', b'')
     try:
-        # Autopad only if the secret actually encodes a multiple of 8 bytes
-        if len(base64._bytes_from_decode_data(secret)) % 8:
-            secret += b'='* (8 - len(secret) % 8)
+        # Autopad if necessary
+        mod = len(secret) % 8
+        if mod:
+            secret += b'=' * (8 - mod)
         key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
         raise TypeError('Incorrect secret')
