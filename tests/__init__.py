@@ -177,6 +177,17 @@ class HotpValidityTestCase(TestCase):
         secret = b'MFRGGZDFMZTWQ2LK'
         self.assertFalse(valid_hotp(713385, secret, last=1, trials=2))
 
+    def test_autopadding(self):
+        """
+        Check if unpadded and padded secrets resolve to the same token
+        """
+        secret = b'MFRGGZDFMZTWQ2LK'
+        for length in [2, 4, 5, 7, 10, 12, 13, 15]:
+            fragment = secret[0:length]
+            fragment_padded = fragment + b'=' * (8 - len(fragment) % 8)
+            self.assertEqual(get_hotp(fragment_padded, 123),
+                             get_hotp(fragment, 123))
+
 
 class TotpGenerationTestCase(TestCase):
     """
