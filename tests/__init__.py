@@ -185,8 +185,8 @@ class HotpValidityTestCase(TestCase):
         for length in [2, 4, 5, 7, 10, 12, 13, 15]:
             fragment = secret[0:length]
             fragment_padded = fragment + b'=' * (8 - len(fragment) % 8)
-            self.assertEqual(get_hotp(fragment_padded, 123, autopad=False),
-                             get_hotp(fragment, 123, autopad=True))
+            self.assertEqual(get_hotp(fragment_padded, 123),
+                             get_hotp(fragment, 123))
 
 
 class TotpGenerationTestCase(TestCase):

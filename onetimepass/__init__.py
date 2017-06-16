@@ -73,7 +73,6 @@ def get_hotp(
         intervals_no,
         as_string=False,
         casefold=True,
-        autopad=True,
         digest_method=hashlib.sha1,
         token_length=6,
 ):
@@ -90,8 +89,6 @@ def get_hotp(
     :type as_string: bool
     :param casefold: True (default), if should accept also lowercase alphabet
     :type casefold: bool
-    :param autopad: True (default), if missing padding should be implied
-    :type autopad: bool
     :param digest_method: method of generating digest (hashlib.sha1 by default)
     :type digest_method: callable
     :param token_length: length of the token (6 by default)
@@ -114,7 +111,7 @@ def get_hotp(
     secret = secret.replace(b' ', b'')
     try:
         # Autopad only if the secret actually encodes a multiple of 8 bytes
-        if autopad and len(base64._bytes_from_decode_data(secret)) % 8:
+        if len(base64._bytes_from_decode_data(secret)) % 8:
             secret += b'='* (8 - len(secret) % 8)
         key = base64.b32decode(secret, casefold=casefold)
     except (TypeError):
@@ -135,7 +132,6 @@ def get_hotp(
 def get_totp(
         secret,
         as_string=False,
-        autopad=True,
         digest_method=hashlib.sha1,
         token_length=6,
         interval_length=30,
@@ -147,8 +143,6 @@ def get_totp(
     :type secret: str
     :param as_string: True if result should be padded string, False otherwise
     :type as_string: bool
-    :param autopad: True (default), if missing padding should be implied
-    :type autopad: bool
     :param digest_method: method of generating digest (hashlib.sha1 by default)
     :type digest_method: callable
     :param token_length: length of the token (6 by default)
@@ -174,7 +168,6 @@ def get_totp(
         secret,
         intervals_no=interv_no,
         as_string=as_string,
-        autopad=autopad,
         digest_method=digest_method,
         token_length=token_length,
     )
