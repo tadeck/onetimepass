@@ -3,7 +3,7 @@ Tests for ``onetimepass`` module
 """
 import six
 import time
-import timecop
+import freezegun as fg
 from unittest import TestCase
 
 from onetimepass import (
@@ -188,7 +188,7 @@ class TotpGenerationTestCase(TestCase):
         created HOTP for proper interval
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             hotp = get_hotp(secret=secret, intervals_no=int(time.time())//30,)
             totp = get_totp(secret=secret)
             self.assertEqual(hotp, totp)
@@ -198,7 +198,7 @@ class TotpGenerationTestCase(TestCase):
         Check if the TOTP also works seamlessly when generated as string
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             hotp = get_hotp(
                 secret=secret,
                 intervals_no=int(time.time())//30,
@@ -213,7 +213,7 @@ class TotpGenerationTestCase(TestCase):
         which is basically the same as hotp
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             hotp = get_hotp(secret=secret, intervals_no=int(time.time())//30,)
             totp = get_totp(secret=secret, clock=None)
             self.assertEqual(hotp, totp)
@@ -232,7 +232,7 @@ class TotpGenerationTestCase(TestCase):
         validate if a totp token falls within a certain window
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             totp = get_totp(secret=secret, clock=(int(time.time()-30)))
             self.assertFalse(valid_totp(totp, secret))
             self.assertTrue(valid_totp(totp, secret, window=1))
@@ -256,7 +256,7 @@ class TotpValidityTestCase(TestCase):
         Check if validating TOTP generated for the same secret works
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             self.assertTrue(valid_totp(get_totp(secret), secret))
 
     def test_validating_invalid_totp_for_same_secret(self):
@@ -264,7 +264,7 @@ class TotpValidityTestCase(TestCase):
         Test case when the same secret is used, but the token differs
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             self.assertFalse(valid_totp(get_totp(secret)+1, secret))
 
     def test_validating_correct_hotp_as_totp(self):
@@ -273,5 +273,5 @@ class TotpValidityTestCase(TestCase):
         very big interval number (matching Unix epoch timestamp)
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with fg.freeze_time():
             self.assertFalse(valid_totp(get_hotp(secret, 1), secret))
