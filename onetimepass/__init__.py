@@ -3,7 +3,7 @@ onetimepass module is designed to work for one-time passwords - HMAC-based and
 time-based. It is compatible with Google Authenticator application and
 applications based on it.
 
-@version: 1.0.1
+@version: 2.0.0
 @author: Tomasz Jaskowski
 @contact: http://github.com/tadeck
 @license: MIT
@@ -27,21 +27,23 @@ False
 False
 """
 
+from __future__ import annotations
+
 import base64
 import hashlib
 import hmac
-import six
 import struct
 import time
+from typing import Any, Callable
 
 __author__ = 'Tomasz Jaskowski <tadeck@gmail.com>'
-__date__ = '31 July 2015'
-__version_info__ = (1, 0, 1)
+__date__ = '21 June 2026'
+__version_info__ = (2, 0, 0)
 __version__ = '%s.%s.%s' % __version_info__
 __license__ = 'MIT'
 
 
-def _is_possible_token(token, token_length=6):
+def _is_possible_token(token: int | bytes | str, token_length: int = 6) -> bool:
     """Determines if given value is acceptable as a token. Used when validating
     tokens.
 
@@ -64,18 +66,18 @@ def _is_possible_token(token, token_length=6):
     False
     """
     if not isinstance(token, bytes):
-        token = six.b(str(token))
+        token = str(token).encode('utf-8')
     return token.isdigit() and len(token) <= token_length
 
 
 def get_hotp(
-        secret,
-        intervals_no,
-        as_string=False,
-        casefold=True,
-        digest_method=hashlib.sha1,
-        token_length=6,
-):
+        secret: bytes | str,
+        intervals_no: int,
+        as_string: bool = False,
+        casefold: bool = True,
+        digest_method: Callable[..., Any] = hashlib.sha1,
+        token_length: int = 6,
+) -> int | bytes:
     """
     Get HMAC-based one-time password on the basis of given secret and
     interval number.
@@ -104,7 +106,7 @@ def get_hotp(
     >>> result == b'816065'
     True
     """
-    if isinstance(secret, six.string_types):
+    if isinstance(secret, str):
         # It is unicode, convert it to bytes
         secret = secret.encode('utf-8')
     # Get rid of all the spacing:
@@ -115,25 +117,25 @@ def get_hotp(
         raise TypeError('Incorrect secret')
     msg = struct.pack('>Q', intervals_no)
     hmac_digest = hmac.new(key, msg, digest_method).digest()
-    ob = hmac_digest[19] if six.PY3 else ord(hmac_digest[19])
+    ob = hmac_digest[19]
     o = ob & 15
     token_base = struct.unpack('>I', hmac_digest[o:o + 4])[0] & 0x7fffffff
     token = token_base % (10 ** token_length)
     if as_string:
         # TODO: should as_string=True return unicode, not bytes?
-        return six.b('{{:0{}d}}'.format(token_length).format(token))
+        return '{:0{}d}'.format(token, token_length).encode('utf-8')
     else:
         return token
 
 
 def get_totp(
-        secret,
-        as_string=False,
-        digest_method=hashlib.sha1,
-        token_length=6,
-        interval_length=30,
-        clock=None,
-):
+        secret: bytes | str,
+        as_string: bool = False,
+        digest_method: Callable[..., Any] = hashlib.sha1,
+        token_length: int = 6,
+        interval_length: int = 30,
+        clock: float | None = None,
+) -> int | bytes:
     """Get time-based one-time password on the basis of given secret and time.
 
     :param secret: the base32-encoded string acting as secret key
@@ -171,13 +173,13 @@ def get_totp(
 
 
 def valid_hotp(
-        token,
-        secret,
-        last=1,
-        trials=1000,
-        digest_method=hashlib.sha1,
-        token_length=6,
-):
+        token: int | bytes | str,
+        secret: bytes | str,
+        last: int = 1,
+        trials: int = 1000,
+        digest_method: Callable[..., Any] = hashlib.sha1,
+        token_length: int = 6,
+) -> int | bool:
     """Check if given token is valid for given secret. Return interval number
     that was successful, or False if not found.
 
@@ -206,27 +208,29 @@ def valid_hotp(
     """
     if not _is_possible_token(token, token_length=token_length):
         return False
-    for i in six.moves.xrange(last + 1, last + trials + 1):
+    token_str = '{:0{}d}'.format(int(token), token_length)
+    for i in range(last + 1, last + trials + 1):
         token_candidate = get_hotp(
             secret=secret,
             intervals_no=i,
             digest_method=digest_method,
             token_length=token_length,
         )
-        if token_candidate == int(token):
+        candidate_str = '{:0{}d}'.format(token_candidate, token_length)
+        if hmac.compare_digest(candidate_str, token_str):
             return i
     return False
 
 
 def valid_totp(
-        token,
-        secret,
-        digest_method=hashlib.sha1,
-        token_length=6,
-        interval_length=30,
-        clock=None,
-        window=0,
-):
+        token: int | bytes | str,
+        secret: bytes | str,
+        digest_method: Callable[..., Any] = hashlib.sha1,
+        token_length: int = 6,
+        interval_length: int = 30,
+        clock: float | None = None,
+        window: int = 0,
+) -> bool:
     """Check if given token is valid time-based one-time password for given
     secret.
 
@@ -264,14 +268,17 @@ def valid_totp(
     if _is_possible_token(token, token_length=token_length):
         if clock is None:
             clock = time.time()
+        token_str = '{:0{}d}'.format(int(token), token_length)
         for w in range(-window, window+1):
-            if int(token) == get_totp(
+            candidate = get_totp(
                 secret,
                 digest_method=digest_method,
                 token_length=token_length,
                 interval_length=interval_length,
                 clock=int(clock)+(w*interval_length)
-            ):
+            )
+            candidate_str = '{:0{}d}'.format(candidate, token_length)
+            if hmac.compare_digest(candidate_str, token_str):
                 return True
     return False
 

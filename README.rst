@@ -4,8 +4,8 @@ Versions
 Current development release: `onetimepass-master.tar.gz`_ |otp-status-dev|_
 
 .. |otp-status-dev| image::
-   https://api.travis-ci.org/tadeck/onetimepass.png?branch=master
-.. _otp-status-dev: https://travis-ci.org/tadeck/onetimepass
+   https://github.com/tadeck/onetimepass/actions/workflows/ci.yml/badge.svg
+.. _otp-status-dev: https://github.com/tadeck/onetimepass/actions/workflows/ci.yml
 .. _onetimepass-master.tar.gz:
    https://github.com/tadeck/onetimepass/archive/master.tar.gz
 
@@ -15,6 +15,13 @@ Changelog
 +---------+------------+------------------------------------------------------+
 | Version | Date       | Changes                                              |
 +=========+============+======================================================+
+| 2.0.0   | 2026-06-21 | - dropped Python 2 support (now requires Python 3.8+),|
+|         |            | - removed the ``six`` dependency (no runtime deps),  |
+|         |            | - switched packaging to ``pyproject.toml``,          |
+|         |            | - added type hints to the public API,                |
+|         |            | - constant-time token comparison during validation,  |
+|         |            | - moved CI from Travis to GitHub Actions,             |
++---------+------------+------------------------------------------------------+
 | 1.0.1   | 2015-07-31 | - fixed tests and build system,                      |
 |         |            | - extended test coverage with Py3.5, PyPy and PyPy3, |
 +---------+------------+------------------------------------------------------+
