@@ -1,10 +1,11 @@
 """
 Tests for ``onetimepass`` module
 """
-import six
 import time
-import timecop
+from datetime import datetime
 from unittest import TestCase
+
+from freezegun import freeze_time
 
 from onetimepass import (
     _is_possible_token, get_hotp, get_totp, valid_hotp, valid_totp,
@@ -26,7 +27,7 @@ class PreliminaryChecksTestCase(TestCase):
         # bytes
         self.assertTrue(_is_possible_token(b'123456'))
         # unicode
-        self.assertTrue(_is_possible_token(six.u('123456')))
+        self.assertTrue(_is_possible_token('123456'))
 
         # token with invalid characters
         self.assertFalse(_is_possible_token(b'abcdef'))
@@ -34,8 +35,8 @@ class PreliminaryChecksTestCase(TestCase):
         self.assertFalse(_is_possible_token(b'12345678'))
 
         # similar cases as above, but for unicode
-        self.assertFalse(_is_possible_token(six.u('abcdef')))
-        self.assertFalse(_is_possible_token(six.u('12345678')))
+        self.assertFalse(_is_possible_token('abcdef'))
+        self.assertFalse(_is_possible_token('12345678'))
 
     def test_variable_length_in_possible_tokens(self):
         """
@@ -68,7 +69,7 @@ class HotpGenerationTestCase(TestCase):
         Check if HOTP is properly generated for unicode secrets
         """
         # Simple generation from unicode
-        secret = six.u('MFRGGZDFMZTWQ2LK')
+        secret = 'MFRGGZDFMZTWQ2LK'
         self.assertEqual(get_hotp(secret, 1), 765705)
 
     def test_returning_hotp_as_string(self):
@@ -105,7 +106,7 @@ class HotpGenerationTestCase(TestCase):
             :param size: requested size of chunks
             :type size: int
             """
-            for i in six.moves.range(0, len(original), size):
+            for i in range(0, len(original), size):
                 yield original[i:i+size]
 
         # Simple generation without spaces:
@@ -138,7 +139,7 @@ class HotpValidityTestCase(TestCase):
         Validity check should also work if secret passed to valid_hotp is
         unicode.
         """
-        secret = six.u('MFRGGZDFMZTWQ2LK')
+        secret = 'MFRGGZDFMZTWQ2LK'
         self.assertTrue(valid_hotp(get_hotp(secret, 123), secret))
 
     def test_validating_correct_hotp_after_exhaustion(self):
@@ -188,7 +189,7 @@ class TotpGenerationTestCase(TestCase):
         created HOTP for proper interval
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             hotp = get_hotp(secret=secret, intervals_no=int(time.time())//30,)
             totp = get_totp(secret=secret)
             self.assertEqual(hotp, totp)
@@ -198,7 +199,7 @@ class TotpGenerationTestCase(TestCase):
         Check if the TOTP also works seamlessly when generated as string
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             hotp = get_hotp(
                 secret=secret,
                 intervals_no=int(time.time())//30,
@@ -213,7 +214,7 @@ class TotpGenerationTestCase(TestCase):
         which is basically the same as hotp
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             hotp = get_hotp(secret=secret, intervals_no=int(time.time())//30,)
             totp = get_totp(secret=secret, clock=None)
             self.assertEqual(hotp, totp)
@@ -232,7 +233,7 @@ class TotpGenerationTestCase(TestCase):
         validate if a totp token falls within a certain window
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             totp = get_totp(secret=secret, clock=(int(time.time()-30)))
             self.assertFalse(valid_totp(totp, secret))
             self.assertTrue(valid_totp(totp, secret, window=1))
@@ -256,7 +257,7 @@ class TotpValidityTestCase(TestCase):
         Check if validating TOTP generated for the same secret works
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             self.assertTrue(valid_totp(get_totp(secret), secret))
 
     def test_validating_invalid_totp_for_same_secret(self):
@@ -264,7 +265,7 @@ class TotpValidityTestCase(TestCase):
         Test case when the same secret is used, but the token differs
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             self.assertFalse(valid_totp(get_totp(secret)+1, secret))
 
     def test_validating_correct_hotp_as_totp(self):
@@ -273,5 +274,5 @@ class TotpValidityTestCase(TestCase):
         very big interval number (matching Unix epoch timestamp)
         """
         secret = b'MFRGGZDFMZTWQ2LK'
-        with timecop.freeze(time.time()):
+        with freeze_time(datetime.now()):
             self.assertFalse(valid_totp(get_hotp(secret, 1), secret))
